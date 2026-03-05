@@ -90,16 +90,7 @@ public class lab1_hw {
     }
 
     private static char shade(int value) {
-        // Map intensity to block characters (dark to light).
-        if (value <= 51) {
-            return '█';
-        } else if (value <= 102) {
-            return '▓';
-        } else if (value <= 153) {
-            return '▒';
-        } else if (value <= 204) {
-            return '░';
-        }
-        return ' ';
+        // BLACK -> '#', WHITE -> ' '
+        return value < 128 ? '#' : ' ';
     }
 }
