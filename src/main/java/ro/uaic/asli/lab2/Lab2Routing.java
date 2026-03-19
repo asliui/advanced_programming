@@ -1,3 +1,5 @@
+package ro.uaic.asli.lab2;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -5,12 +7,12 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-public class lab2 {
+public class Lab2Routing {
     public static class Location {
-        private String name;
-        private String type;
-        private double x;
-        private double y;
+        private final String name;
+        private final String type;
+        private final double x;
+        private final double y;
 
         public Location(String name, String type, double x, double y) {
             this.name = name;
@@ -23,32 +25,16 @@ public class lab2 {
             return name;
         }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
         public String getType() {
             return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
         }
 
         public double getX() {
             return x;
         }
 
-        public void setX(double x) {
-            this.x = x;
-        }
-
         public double getY() {
             return y;
-        }
-
-        public void setY(double y) {
-            this.y = y;
         }
 
         public double distanceTo(Location other) {
@@ -89,46 +75,20 @@ public class lab2 {
             return type;
         }
 
-        public void setType(String type) {
-            this.type = type;
-        }
-
         public Location getFrom() {
             return from;
-        }
-
-        public void setFrom(Location from) {
-            this.from = from;
         }
 
         public Location getTo() {
             return to;
         }
 
-        public void setTo(Location to) {
-            this.to = to;
-        }
-
         public double getLength() {
             return length;
         }
 
-        public void setLength(double length) {
-            if (length < from.distanceTo(to)) {
-                throw new IllegalArgumentException("Road length cannot be less than Euclidean distance.");
-            }
-            this.length = length;
-        }
-
         public double getSpeedLimit() {
             return speedLimit;
-        }
-
-        public void setSpeedLimit(double speedLimit) {
-            if (speedLimit <= 0) {
-                throw new IllegalArgumentException("Speed limit must be positive.");
-            }
-            this.speedLimit = speedLimit;
         }
 
         public double travelTime() {
@@ -149,10 +109,6 @@ public class lab2 {
         public RouteResult(List<Location> path, double totalWeight) {
             this.path = path;
             this.totalWeight = totalWeight;
-        }
-
-        public List<Location> getPath() {
-            return path;
         }
 
         public double getTotalWeight() {
@@ -253,13 +209,6 @@ public class lab2 {
         Road r1 = new Road("highway", a, b, 5.0, 100);
         Road r2 = new Road("express", b, c, 8.5, 120);
         Road r3 = new Road("country", a, c, 11.0, 60);
-
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println(c);
-        System.out.println(r1);
-        System.out.println(r2);
-        System.out.println(r3);
 
         BestRouteSolver solver = new BestRouteSolver();
         solver.addRoad(r1);

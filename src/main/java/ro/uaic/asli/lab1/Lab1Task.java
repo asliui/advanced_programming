@@ -1,19 +1,19 @@
-public class lab1_hw {
+package ro.uaic.asli.lab1;
+
+public class Lab1Task {
     private static final int BLACK = 0;
     private static final int WHITE = 255;
-    // Avoid printing huge matrices; show timing instead.
     private static final int DISPLAY_THRESHOLD = 60;
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: java lab1 <n> <rectangle|circle>");
+            System.out.println("Usage: java Lab1Task <n> <rectangle|circle>");
             return;
         }
 
         int n = Integer.parseInt(args[0]);
         String shape = args[1].toLowerCase();
 
-        // Measure only generation time, not printing time.
         long t1 = System.nanoTime();
         int[][] matrix;
         switch (shape) {
@@ -27,7 +27,6 @@ public class lab1_hw {
         }
         long t2 = System.nanoTime();
 
-        // Pretty-print only for smaller sizes.
         if (n <= DISPLAY_THRESHOLD) {
             System.out.println(matrixToString(matrix));
         } else {
@@ -39,7 +38,6 @@ public class lab1_hw {
     private static int[][] darkRectangleOnWhite(int n) {
         int[][] m = new int[n][n];
         fill(m, WHITE);
-        // Centered rectangle (middle half of the image).
         int start = n / 4;
         int end = (3 * n) / 4;
         for (int i = start; i < end; i++) {
@@ -57,7 +55,6 @@ public class lab1_hw {
         int cy = n / 2;
         double radius = n / 3.0;
         double r2 = radius * radius;
-        // Fill pixels inside the circle radius.
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 double dx = i - cx;
@@ -90,7 +87,6 @@ public class lab1_hw {
     }
 
     private static char shade(int value) {
-        // BLACK -> '#', WHITE -> ' '
         return value < 128 ? '#' : ' ';
     }
 }
