@@ -8,7 +8,6 @@ import ro.uaic.asli.lab4.generator.RandomCityGenerator;
 import ro.uaic.asli.lab4.model.Intersection;
 import ro.uaic.asli.lab4.model.Street;
 
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,54 +17,81 @@ import java.util.stream.IntStream;
 
 public class Lab4App {
     public static void main(String[] args) {
-        // Compulsory: create 10 intersections with streams.
+        System.out.println("--- COMPULSORY (1p) ---");
+        runCompulsory();
+
+        System.out.println("\n--- HOMEWORK (2p) ---");
+        runHomework();
+
+        System.out.println("\n--- ADVANCED (2p) ---");
+        runAdvanced();
+    }
+
+    /**
+     * Goal: Basic OOP model, Java Streams for creation,
+     * LinkedList sorting with method reference, and HashSet duplicate check.
+     */
+    private static void runCompulsory() {
         List<Intersection> intersections = IntStream.range(0, 10)
-                .mapToObj(i -> new Intersection("I" + i, i * 10.0, (i % 3) * 12.0))
+                .mapToObj(i -> new Intersection("V" + i, i * 5.0, i * 2.0))
                 .toList();
+        System.out.println("Created " + intersections.size() + " intersections using Stream API.");
 
-        // Compulsory: create LinkedList streets and sort with comparator lambda/method ref.
         LinkedList<Street> streets = new LinkedList<>();
-        for (int i = 0; i < intersections.size() - 1; i++) {
-            Intersection a = intersections.get(i);
-            Intersection b = intersections.get(i + 1);
-            streets.add(new Street("S" + i, a.distanceTo(b), a, b));
-        }
-        streets.add(new Street("S-extra-1", intersections.get(0).distanceTo(intersections.get(5)), intersections.get(0), intersections.get(5)));
-        streets.add(new Street("S-extra-2", intersections.get(2).distanceTo(intersections.get(7)), intersections.get(2), intersections.get(7)));
-        streets.sort(Comparator.comparingDouble(Street::getLength));
+        streets.add(new Street("Main St", 15.5, intersections.get(0), intersections.get(1)));
+        streets.add(new Street("Oak Ave", 10.2, intersections.get(1), intersections.get(2)));
+        streets.add(new Street("Short Lane", 5.0, intersections.get(2), intersections.get(3)));
 
-        // Compulsory: HashSet duplicate check.
-        Set<Intersection> set = new HashSet<>(intersections);
-        set.add(intersections.get(0));
-        System.out.println("Intersections in HashSet (duplicate ignored): " + set.size());
+        streets.sort(Street::compareTo);
+        System.out.println("Streets sorted by length (Compulsory check):");
+        streets.forEach(System.out::println);
 
-        City city = new City("SampleCity", set, streets);
+        Set<Intersection> intersectionSet = new HashSet<>(intersections);
+        intersectionSet.add(intersections.get(0));
+        System.out.println("HashSet size (Should be 10): " + intersectionSet.size());
+    }
 
-        // Homework: stream query.
-        var longAndBusy = city.streetsLongerThanAndJoiningAtLeast(15.0, 3);
-        System.out.println("Long streets with both endpoints degree >= 3:");
-        longAndBusy.forEach(System.out::println);
-
-        // Homework: list of possible minimum cable solutions.
-        MinimumCablePlanner planner = new MinimumCablePlanner();
-        List<CableSolution> solutions = planner.bestSolutions(city, 3);
-        System.out.println("Candidate cable plans ordered by cost:");
-        for (int i = 0; i < solutions.size(); i++) {
-            CableSolution solution = solutions.get(i);
-            System.out.println((i + 1) + ") cost=" + solution.totalCost() + ", edges=" + solution.streets().size());
-        }
-
-        // Advanced: 2-approx maintenance route.
-        MaintenanceRoutePlanner routePlanner = new MaintenanceRoutePlanner();
-        MaintenanceRoute route = routePlanner.twoApproximateRoute(city.getIntersections());
-        System.out.println("Maintenance route length: " + route.totalLength());
-        System.out.println("Route: " + route.tour().stream().map(Intersection::name).collect(Collectors.joining(" -> ")));
-
-        // Homework/Advanced: random generator using third-party fake names.
+    /**
+     * Goal: City class, JGraphT for MST, DataFaker for names,
+     * and Stream queries for specific data filtering.
+     */
+    private static void runHomework() {
         RandomCityGenerator generator = new RandomCityGenerator();
-        City generated = generator.generate("GeneratedCity", 12, 0.25);
-        System.out.println("Generated city: " + generated.getName()
-                + ", intersections=" + generated.getIntersections().size()
-                + ", streets=" + generated.getStreets().size());
+        City city = generator.generate("IasiCity", 15, 0.3);
+        System.out.println("City Generated: " + city.getName() + " with Faker names.");
+
+        MinimumCablePlanner planner = new MinimumCablePlanner();
+        CableSolution mstSolution = planner.minimumCostSolution(city);
+        System.out.println("Optimal Cable Solution Cost: " + String.format("%.2f", mstSolution.totalCost()));
+
+        var filteredStreets = city.streetsLongerThanAndJoiningAtLeast(50.0, 3);
+        System.out.println("Filtered Streets (Long & Busy): " + filteredStreets.size());
+
+        List<CableSolution> topSolutions = planner.bestSolutions(city, 3);
+        System.out.println("Top 3 alternative solutions generated and sorted by cost.");
+        for (int i = 0; i < topSolutions.size(); i++) {
+            var solution = topSolutions.get(i);
+            System.out.println((i + 1) + ") cost=" + String.format("%.2f", solution.totalCost())
+                    + ", edges=" + solution.streets().size());
+        }
+    }
+
+    /**
+     * Goal: TSP 2-Approximation (maintenance route),
+     * Euclidean random problem generation (triangle inequality).
+     */
+    private static void runAdvanced() {
+        RandomCityGenerator generator = new RandomCityGenerator();
+        City advancedCity = generator.generate("AdvancedIasi", 20, 0.5);
+        System.out.println("Random problem generated. Distances satisfy triangle inequality.");
+
+        MaintenanceRoutePlanner routePlanner = new MaintenanceRoutePlanner();
+        MaintenanceRoute route = routePlanner.twoApproximateRoute(advancedCity.getIntersections());
+
+        System.out.println("Maintenance Route Found (TSP 2-Approx):");
+        System.out.println("Total Length: " + String.format("%.2f", route.totalLength()));
+        System.out.println("Route Path: " + route.tour().stream()
+                .map(Intersection::name)
+                .collect(Collectors.joining(" -> ")));
     }
 }
