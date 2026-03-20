@@ -25,6 +25,11 @@
             <artifactId>datafaker</artifactId>
             <version>2.4.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.32</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -35,10 +40,33 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ro.uaic.asli.lab4.Lab4App</mainClass>
+                            <mainClass>ro.uaic.asli.lab5.Lab5App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ro.uaic.asli.lab5.Lab5App</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

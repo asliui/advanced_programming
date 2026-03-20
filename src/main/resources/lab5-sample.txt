@@ -1,0 +1,4 @@
+# id|title|location|year|authors|description|concepts
+knuth67|The Art of Computer Programming|https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming|1967|Donald E. Knuth|Classic algorithms series.|algorithms,analysis,programming
+jvm25|The Java Virtual Machine Specification|https://docs.oracle.com/javase/specs/jvms/se25/html/index.html|2025|Tim Lindholm & others|Official JVM spec.|java,jvm,language-spec
+java25|The Java Language Specification|https://docs.oracle.com/javase/specs/jls/se25/jls25.pdf|2025|James Gosling & others|Official Java language spec.|java,language-spec,compiler
