@@ -1,11 +1,10 @@
 package ro.uaic.asli.lab5;
 
+import java.util.Set;
+
 import ro.uaic.asli.lab5.exception.CatalogException;
 import ro.uaic.asli.lab5.model.BibliographicResource;
 import ro.uaic.asli.lab5.repository.CatalogRepository;
-import ro.uaic.asli.lab5.repository.ResourceViewer;
-
-import java.util.Set;
 
 public final class CompulsoryApp {
     public static void main(String[] args) {
@@ -29,7 +28,16 @@ public final class CompulsoryApp {
                     Set.of("java", "jvm", "spec")));
 
             System.out.println("Catalog created with " + repository.listAll().size() + " entries.");
-            new ResourceViewer().view(repository.getById("jvm25"));
+            for (var resource : repository.listAll()) {
+                System.out.println();
+                System.out.println("ID: " + resource.getId());
+                System.out.println("Title: " + resource.getTitle());
+                System.out.println("Location: " + resource.getLocation());
+                System.out.println("Year: " + resource.getYear());
+                System.out.println("Authors: " + resource.getAuthors());
+                System.out.println("Description: " + resource.getDescription());
+                System.out.println("Concepts: " + String.join(", ", resource.getConcepts()));
+            }
         } catch (CatalogException e) {
             System.err.println("Compulsory flow failed: " + e.getMessage());
         }

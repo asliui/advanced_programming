@@ -1,13 +1,13 @@
 package ro.uaic.asli.lab4;
 
-import ro.uaic.asli.lab4.model.Intersection;
-import ro.uaic.asli.lab4.model.Street;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
+
+import ro.uaic.asli.lab4.model.Intersection;
+import ro.uaic.asli.lab4.model.Street;
 
 public final class CompulsoryApp {
     public static void main(String[] args) {
