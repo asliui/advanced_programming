@@ -1,0 +1,8 @@
+# Homework tier: port 8082 by default (Advanced uses 8080)
+server:
+  port: 8082
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration

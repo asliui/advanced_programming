@@ -1,12 +1,12 @@
 package ro.uaic.asli.lab6.dao;
 
-import ro.uaic.asli.lab6.database.DatabaseConnection;
-import ro.uaic.asli.lab6.model.Genre;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import ro.uaic.asli.lab6.database.DatabaseConnection;
+import ro.uaic.asli.lab6.model.Genre;
 
 public final class GenreDAO {
     public GenreDAO() {
@@ -15,6 +15,7 @@ public final class GenreDAO {
     /**
      * Creates a genre (by unique name) and returns it.
      * Uses PostgreSQL-specific UPSERT semantics.
+     * genre crud: create,findbyname or id
      */
     public Genre create(String name) {
         if (name == null || name.isBlank()) {

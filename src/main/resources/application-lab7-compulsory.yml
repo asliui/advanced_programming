@@ -1,0 +1,16 @@
+# Compulsory tier: only GET /api/movies — disable API docs UI
+# Port 8081 so it does not clash with Advanced/Homework on 8080/8082 when another instance is running.
+server:
+  port: 8081
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# Avoid Spring Boot's random "generated security password" when only our PermitAll chain is used
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration

@@ -49,7 +49,7 @@ public final class DatabaseConnection {
         return INSTANCE;
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() { //gives datasource connection to flyway
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
