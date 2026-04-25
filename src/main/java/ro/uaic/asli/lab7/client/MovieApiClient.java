@@ -188,7 +188,7 @@ public final class MovieApiClient {
 
     private static void updateActor(RestTemplate rest, String token, Scanner scanner) {
         System.out.print("actor id: ");
-        long id = Long.parseLong(scanner.nextLine().trim());
+        int id = Integer.parseInt(scanner.nextLine().trim());
         System.out.print("new name: ");
         String name = scanner.nextLine();
         Map<String, Object> body = new HashMap<>();
@@ -209,7 +209,7 @@ public final class MovieApiClient {
 
     private static void deleteActor(RestTemplate rest, String token, Scanner scanner) {
         System.out.print("actor id: ");
-        long id = Long.parseLong(scanner.nextLine().trim());
+        int id = Integer.parseInt(scanner.nextLine().trim());
         HttpHeaders headers = new HttpHeaders();
         addBearerIfPresent(headers, token);
         HttpEntity<Void> entity = new HttpEntity<>(headers);
@@ -232,7 +232,7 @@ public final class MovieApiClient {
         System.out.print("score (0-10): ");
         BigDecimal score = new BigDecimal(scanner.nextLine().trim());
         System.out.print("genreId (1=Drama,2=Sci-Fi,3=Action in seed): ");
-        long genreId = Long.parseLong(scanner.nextLine().trim());
+        int genreId = Integer.parseInt(scanner.nextLine().trim());
 
         Map<String, Object> body = new HashMap<>();
         body.put("title", title);
@@ -258,7 +258,7 @@ public final class MovieApiClient {
 
     private static void updateMovie(RestTemplate rest, String token, Scanner scanner) {
         System.out.print("movie id: ");
-        long id = Long.parseLong(scanner.nextLine().trim());
+        int id = Integer.parseInt(scanner.nextLine().trim());
         System.out.print("title: ");
         String title = scanner.nextLine();
         System.out.print("releaseDate (yyyy-MM-dd): ");
@@ -268,7 +268,7 @@ public final class MovieApiClient {
         System.out.print("score: ");
         BigDecimal score = new BigDecimal(scanner.nextLine().trim());
         System.out.print("genreId: ");
-        long genreId = Long.parseLong(scanner.nextLine().trim());
+        int genreId = Integer.parseInt(scanner.nextLine().trim());
 
         Map<String, Object> body = new HashMap<>();
         body.put("title", title);
@@ -294,7 +294,7 @@ public final class MovieApiClient {
 
     private static void patchScore(RestTemplate rest, String token, Scanner scanner) {
         System.out.print("movie id: ");
-        long id = Long.parseLong(scanner.nextLine().trim());
+        int id = Integer.parseInt(scanner.nextLine().trim());
         System.out.print("new score: ");
         BigDecimal score = new BigDecimal(scanner.nextLine().trim());
 
@@ -315,7 +315,7 @@ public final class MovieApiClient {
 
     private static void deleteMovie(RestTemplate rest, String token, Scanner scanner) {
         System.out.print("movie id: ");
-        long id = Long.parseLong(scanner.nextLine().trim());
+        int id = Integer.parseInt(scanner.nextLine().trim());
         HttpHeaders headers = new HttpHeaders();
         addBearerIfPresent(headers, token);
         HttpEntity<Void> entity = new HttpEntity<>(headers);

@@ -17,7 +17,6 @@ public class PermitAllSecurityConfig {
     @Bean
     public SecurityFilterChain permitAllSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/h2-console/**")
                 .ignoringRequestMatchers("/api/**")
         );
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));

@@ -30,7 +30,7 @@ public class MovieDetailController {
     @Operation(summary = "Get movie by id")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public MovieResponse getMovie(@PathVariable Long id) {
+    public MovieResponse getMovie(@PathVariable Integer id) {
         return movieService.findById(id);
     }
 }

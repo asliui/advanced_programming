@@ -57,7 +57,7 @@ public class MovieCommandController {
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public MovieResponse updateMovie(@PathVariable Long id, @Valid @RequestBody MovieRequest request) {
+    public MovieResponse updateMovie(@PathVariable Integer id, @Valid @RequestBody MovieRequest request) {
         return movieService.update(id, request);
     }
 
@@ -66,7 +66,7 @@ public class MovieCommandController {
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public MovieResponse patchScore(@PathVariable Long id, @Valid @RequestBody ScorePatchRequest scorePatch) {
+    public MovieResponse patchScore(@PathVariable Integer id, @Valid @RequestBody ScorePatchRequest scorePatch) {
         return movieService.updateScore(id, scorePatch.getScore());
     }
 
@@ -75,7 +75,7 @@ public class MovieCommandController {
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponse(responseCode = "204", description = "No content")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMovie(@PathVariable Integer id) {
         movieService.delete(id);
         return ResponseEntity.noContent().build();
     }

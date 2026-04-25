@@ -2,6 +2,7 @@ package ro.uaic.asli.lab7.config;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ro.uaic.asli.lab7.entity.ActorEntity;
@@ -20,6 +21,7 @@ import java.util.Set;
  * Seeds H2 with sample genres, actors, and movies for demos (unrelated-movies solver, Postman).
  */
 @Component
+@Profile("lab7-seed")
 public class Lab7DataInitializer implements ApplicationRunner {
 
     private final GenreRepository genreRepository;

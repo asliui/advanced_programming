@@ -1,10 +1,8 @@
 package ro.uaic.asli.lab7.web;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.List;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import ro.uaic.asli.lab7.dto.ActorRequest;
 import ro.uaic.asli.lab7.dto.ActorResponse;
 import ro.uaic.asli.lab7.service.ActorService;
-
-import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/actors")
@@ -46,7 +47,7 @@ public class ActorController {
     @Operation(summary = "Get actor by id")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public ActorResponse getActor(@PathVariable Long id) {
+    public ActorResponse getActor(@PathVariable Integer id) {
         return actorService.findById(id);
     }
 
@@ -64,12 +65,12 @@ public class ActorController {
         return ResponseEntity.created(location).body(created);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") 
     @Operation(summary = "Update actor name")
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public ActorResponse updateActor(@PathVariable Long id, @Valid @RequestBody ActorRequest request) {
+    public ActorResponse updateActor(@PathVariable Integer id, @Valid @RequestBody ActorRequest request) {
         return actorService.update(id, request);
     }
 
@@ -78,7 +79,7 @@ public class ActorController {
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponse(responseCode = "204", description = "No content")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public ResponseEntity<Void> deleteActor(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteActor(@PathVariable Integer id) {
         actorService.delete(id);
         return ResponseEntity.noContent().build();
     }

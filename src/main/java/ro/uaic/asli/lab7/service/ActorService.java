@@ -30,7 +30,7 @@ public class ActorService {
     }
 
     @Transactional(readOnly = true)
-    public ActorResponse findById(Long id) {
+    public ActorResponse findById(Integer id) {
         return actorRepository.findById(id)
                 .map(this::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + id));
@@ -49,7 +49,7 @@ public class ActorService {
     }
 
     @Transactional
-    public ActorResponse update(Long id, ActorRequest request) {
+    public ActorResponse update(Integer id, ActorRequest request) {
         ActorEntity a = actorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + id));
         String name = request.getName().strip();
@@ -62,7 +62,7 @@ public class ActorService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Integer id) {
         if (!actorRepository.existsById(id)) {
             throw new ResourceNotFoundException("Actor not found with id: " + id);
         }

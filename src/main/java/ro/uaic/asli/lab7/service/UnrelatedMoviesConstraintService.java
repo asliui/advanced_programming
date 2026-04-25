@@ -95,7 +95,7 @@ public class UnrelatedMoviesConstraintService {
         int n = movies.size();
         boolean[][] conflict = new boolean[n][n];
 
-        Map<Long, List<Integer>> actorToMovieIndices = new HashMap<>();
+        Map<Integer, List<Integer>> actorToMovieIndices = new HashMap<>();
         for (int i = 0; i < n; i++) {
             for (ActorEntity a : movies.get(i).getActors()) {
                 actorToMovieIndices.computeIfAbsent(a.getId(), ignored -> new ArrayList<>()).add(i);

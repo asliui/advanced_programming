@@ -25,7 +25,7 @@ public class MovieMapper {
             r.setGenreId(entity.getGenre().getId());
             r.setGenreName(entity.getGenre().getName());
         }
-        List<Long> actorIds = entity.getActors().stream()
+        List<Integer> actorIds = entity.getActors().stream()
                 .map(ActorEntity::getId)
                 .sorted()
                 .toList();

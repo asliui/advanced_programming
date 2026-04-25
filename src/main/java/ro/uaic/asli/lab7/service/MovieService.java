@@ -1,7 +1,13 @@
 package ro.uaic.asli.lab7.service;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import ro.uaic.asli.lab7.dto.MovieRequest;
 import ro.uaic.asli.lab7.dto.MovieResponse;
 import ro.uaic.asli.lab7.entity.ActorEntity;
@@ -13,11 +19,6 @@ import ro.uaic.asli.lab7.mapper.MovieMapper;
 import ro.uaic.asli.lab7.repository.ActorRepository;
 import ro.uaic.asli.lab7.repository.GenreRepository;
 import ro.uaic.asli.lab7.repository.MovieRepository;
-
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class MovieService {
@@ -47,14 +48,14 @@ public class MovieService {
     }
 
     @Transactional(readOnly = true)
-    public MovieResponse findById(Long id) {
+    public MovieResponse findById(Integer id) {
         return movieRepository.findByIdWithActorsAndGenre(id)
                 .map(movieMapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
     }
 
     @Transactional
-    public MovieResponse create(MovieRequest request) {
+    public MovieResponse create(MovieRequest request) { //POST
         GenreEntity genre = genreRepository.findById(request.getGenreId())
                 .orElseThrow(() -> new BadRequestException("Genre not found with id: " + request.getGenreId()));
 
@@ -69,7 +70,7 @@ public class MovieService {
     }
 
     @Transactional
-    public MovieResponse update(Long id, MovieRequest request) {
+    public MovieResponse update(Integer id, MovieRequest request) { //PUT
         MovieEntity movie = movieRepository.findByIdWithActorsAndGenre(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
         GenreEntity genre = genreRepository.findById(request.getGenreId())
@@ -85,7 +86,7 @@ public class MovieService {
     }
 
     @Transactional
-    public MovieResponse updateScore(Long id, BigDecimal score) {
+    public MovieResponse updateScore(Integer id, BigDecimal score) { //PATCH
         MovieEntity movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
         movie.setScore(score);
@@ -96,7 +97,7 @@ public class MovieService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Integer id) {
         if (!movieRepository.existsById(id)) {
             throw new ResourceNotFoundException("Movie not found with id: " + id);
         }
@@ -111,12 +112,12 @@ public class MovieService {
         movie.setGenre(genre);
     }
 
-    private Set<ActorEntity> resolveActors(List<Long> actorIds) {
+    private Set<ActorEntity> resolveActors(List<Integer> actorIds) {
         if (actorIds == null || actorIds.isEmpty()) {
             return new HashSet<>();
         }
         Set<ActorEntity> actors = new HashSet<>();
-        for (Long aid : actorIds) {
+        for (Integer aid : actorIds) {
             ActorEntity a = actorRepository.findById(aid)
                     .orElseThrow(() -> new BadRequestException("Actor not found with id: " + aid));
             actors.add(a);

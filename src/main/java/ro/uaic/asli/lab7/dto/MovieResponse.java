@@ -8,26 +8,26 @@ import java.util.List;
 
 public class MovieResponse {
 
-    private Long id;
+    private Integer id;
     private String title;
     @JsonProperty("releaseDate")
     private LocalDate releaseDate;
     private int duration;
     private BigDecimal score;
     @JsonProperty("genreId")
-    private Long genreId;
+    private Integer genreId;
     @JsonProperty("genreName")
     private String genreName;
     @JsonProperty("actorIds")
-    private List<Long> actorIds;
+    private List<Integer> actorIds;
     @JsonProperty("actorNames")
     private List<String> actorNames;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -63,11 +63,11 @@ public class MovieResponse {
         this.score = score;
     }
 
-    public Long getGenreId() {
+    public Integer getGenreId() {
         return genreId;
     }
 
-    public void setGenreId(Long genreId) {
+    public void setGenreId(Integer genreId) {
         this.genreId = genreId;
     }
 
@@ -79,11 +79,11 @@ public class MovieResponse {
         this.genreName = genreName;
     }
 
-    public List<Long> getActorIds() {
+    public List<Integer> getActorIds() {
         return actorIds;
     }
 
-    public void setActorIds(List<Long> actorIds) {
+    public void setActorIds(List<Integer> actorIds) {
         this.actorIds = actorIds;
     }
 

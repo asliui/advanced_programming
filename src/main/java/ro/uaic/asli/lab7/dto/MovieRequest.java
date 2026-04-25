@@ -31,10 +31,10 @@ public class MovieRequest {
 
     @NotNull
     @JsonProperty("genreId")
-    private Long genreId;
+    private Integer genreId;
 
     @JsonProperty("actorIds")
-    private List<Long> actorIds;
+    private List<Integer> actorIds;
 
     public String getTitle() {
         return title;
@@ -68,19 +68,19 @@ public class MovieRequest {
         this.score = score;
     }
 
-    public Long getGenreId() {
+    public Integer getGenreId() {
         return genreId;
     }
 
-    public void setGenreId(Long genreId) {
+    public void setGenreId(Integer genreId) {
         this.genreId = genreId;
     }
 
-    public List<Long> getActorIds() {
+    public List<Integer> getActorIds() {
         return actorIds;
     }
 
-    public void setActorIds(List<Long> actorIds) {
+    public void setActorIds(List<Integer> actorIds) {
         this.actorIds = actorIds;
     }
 }

@@ -28,14 +28,12 @@ public class AdvancedSecurityConfig {
     @Bean
     public SecurityFilterChain advancedSecurityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/h2-console/**")
                 .ignoringRequestMatchers("/api/**")
         );
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/actors/**").permitAll()
