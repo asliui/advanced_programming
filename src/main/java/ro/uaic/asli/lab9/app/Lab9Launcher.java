@@ -64,8 +64,8 @@ public final class Lab9Launcher {
                     "--cols", "19",
                     "--robots", "3",
                     "--bunnies", "1",
-                    "--time-ms", "60000",
-                    "--print-ms", "1000",
+                    "--time-ms", "120000",
+                    "--print-ms", "2800",
                     "--sense", "2",
                     "--ascii-walls"
             };
@@ -123,12 +123,12 @@ public final class Lab9Launcher {
         };
         long bunnyDelay = switch (mode) {
             case COMPULSORY -> 450;
-            case HOMEWORK -> 350;
+            case HOMEWORK -> 850;
             case ADVANCED -> 280;
         };
         long robotDelay = switch (mode) {
             case COMPULSORY -> 500;
-            case HOMEWORK -> 400;
+            case HOMEWORK -> 900;
             case ADVANCED -> 320;
         };
 

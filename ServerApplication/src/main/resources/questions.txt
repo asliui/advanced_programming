@@ -1,0 +1,15 @@
+# Lab 10 quiz questions (pipe-separated).
+# Format: QUESTION|OPTION_A|OPTION_B|OPTION_C|OPTION_D|CORRECT_OPTION
+# Correct answers are balanced across A/B/C/D so the game feels realistic.
+Which port is commonly used for HTTPS?|443|80|22|21|A
+Which Java class accepts incoming TCP client connections?|Socket|ServerSocket|DatagramSocket|URLConnection|B
+What does JVM stand for?|Java Variable Method|Joint Virtual Memory|Java Virtual Machine|Java Vendor Model|C
+Which transport protocol is connectionless?|TCP|HTTP|FTP|UDP|D
+Which Java keyword creates a subclass?|implements|extends|inherits|instanceof|B
+Which Java method starts a thread's execution?|start|run|launch|begin|A
+Which TCP port does SSH use by default?|22|23|25|443|A
+What does TCP guarantee that UDP does not?|Higher speed|Multicast|Reliable, ordered delivery|Lower latency|C
+Which Java keyword prevents a class from being extended?|static|abstract|sealed|final|D
+At which OSI layer does TCP operate?|Application|Network|Data link|Transport|D
+What does a DNS query primarily resolve?|MAC address to IP|Hostname to IP address|IP address to MAC|Hostname to MAC|B
+Which Java type stores a fixed-size sequence of primitive elements?|ArrayList|LinkedList|Array|HashSet|C

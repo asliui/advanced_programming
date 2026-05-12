@@ -1,0 +1,7 @@
+# Knowledge base for the supervised-learning style bot (exact question text match).
+# Format: QUESTION_TEXT|CORRECT_OPTION
+What is the capital of France?|A
+Which planet is known as the Red Planet?|B
+What is 15 + 27?|C
+Who wrote Romeo and Juliet?|C
+What does HTTP stand for?|A
