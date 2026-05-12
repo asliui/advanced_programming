@@ -4,6 +4,8 @@ import ro.uaic.asli.lab10.bot.BotStrategy;
 import ro.uaic.asli.lab10.bot.KnowledgeBaseBot;
 import ro.uaic.asli.lab10.bot.LLMBotStub;
 import ro.uaic.asli.lab10.bot.RandomBot;
+import ro.uaic.asli.lab10.persistence.audit.Lab11AuditContextHolder;
+import ro.uaic.asli.lab10.persistence.service.QuizGamePersistenceService;
 import ro.uaic.asli.lab10.command.CommandParser;
 import ro.uaic.asli.lab10.model.Player;
 import ro.uaic.asli.lab10.model.Question;
@@ -35,6 +37,7 @@ public final class HomeworkGameSession implements Lab10Session {
     private final GameServer server;
     private final QuestionRepository questionRepository;
     private final KnowledgeBaseRepository knowledgeBase;
+    private final QuizGamePersistenceService persistence;
 
     private final List<Player> players = new ArrayList<>();
     private final Set<String> takenNames = new HashSet<>();
@@ -54,9 +57,19 @@ public final class HomeworkGameSession implements Lab10Session {
      * Loads question and knowledge-base files from the given paths (or classpath defaults when {@code null}).
      */
     public HomeworkGameSession(GameServer server, Path questionsOverride, Path knowledgeBaseOverride) {
+        this(server, questionsOverride, knowledgeBaseOverride, null);
+    }
+
+    public HomeworkGameSession(
+            GameServer server,
+            Path questionsOverride,
+            Path knowledgeBaseOverride,
+            QuizGamePersistenceService persistence
+    ) {
         this.server = server;
         this.questionRepository = QuestionRepository.load(questionsOverride);
         this.knowledgeBase = KnowledgeBaseRepository.load(knowledgeBaseOverride);
+        this.persistence = persistence;
     }
 
     @Override
@@ -145,6 +158,14 @@ public final class HomeworkGameSession implements Lab10Session {
             takenNames.add(name);
             connection.setPlayerName(name);
         }
+        if (persistence != null) {
+            try {
+                Lab11AuditContextHolder.setPrincipal(name);
+                persistence.registerParticipant(name);
+            } finally {
+                Lab11AuditContextHolder.clear();
+            }
+        }
         connection.sendLine("OK|joined as " + name);
         broadcastLine("EVENT|playerJoined=" + name);
     }
@@ -179,6 +200,14 @@ public final class HomeworkGameSession implements Lab10Session {
             }
             players.add(Player.bot(botName, strategy));
             takenNames.add(botName);
+        }
+        if (persistence != null) {
+            try {
+                Lab11AuditContextHolder.setPrincipal(botName);
+                persistence.registerParticipant(botName);
+            } finally {
+                Lab11AuditContextHolder.clear();
+            }
         }
         connection.sendLine("OK|botAdded|" + botName + "|kind=" + kind);
         broadcastLine("EVENT|botJoined=" + botName + "|kind=" + kind);
@@ -229,6 +258,16 @@ public final class HomeworkGameSession implements Lab10Session {
             this.quizGame = game;
         }
 
+        QuizGamePersistenceService.MatchHandle matchHandle = null;
+        if (persistence != null) {
+            try {
+                matchHandle = persistence.beginMatch(game.getQuestionsSnapshot());
+            } catch (RuntimeException ex) {
+                broadcastLine("ERROR|persistenceBeginFailed|" + ex.getMessage());
+                return;
+            }
+        }
+
         int playerCount;
         synchronized (this) {
             playerCount = players.size();
@@ -268,6 +307,19 @@ public final class HomeworkGameSession implements Lab10Session {
         w.ifPresent(player -> broadcastLine("WINNER|" + player.scoreLine()));
         if (w.isEmpty()) {
             broadcastLine("WINNER|none");
+        }
+
+        if (persistence != null && matchHandle != null) {
+            List<Player> snapshot;
+            int totalRounds = game.getQuestionCount();
+            synchronized (this) {
+                snapshot = List.copyOf(players);
+            }
+            try {
+                persistence.completeMatch(matchHandle, snapshot, totalRounds);
+            } catch (RuntimeException ex) {
+                broadcastLine("ERROR|persistenceSaveFailed|" + ex.getMessage());
+            }
         }
     }
 

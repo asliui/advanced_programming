@@ -36,4 +36,11 @@ public final class QuizGame {
     public int getQuestionCount() {
         return questions.size();
     }
+
+    /**
+     * Full ordered deck (for persistence / Lab 11).
+     */
+    public List<Question> getQuestionsSnapshot() {
+        return List.copyOf(questions);
+    }
 }

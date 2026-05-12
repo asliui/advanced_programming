@@ -4,25 +4,76 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.2</version>
+        <relativePath/>
+    </parent>
+
     <groupId>ro.uaic.asli</groupId>
     <artifactId>lab10-server-application</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Lab 10 — ServerApplication</name>
-    <description>Multiplayer quiz TCP server (compulsory / homework / advanced)</description>
+    <name>Lab 10 / Lab 11 — ServerApplication</name>
+    <description>TCP quiz server with JPA persistence (Lab 11)</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
+        <jmh.version>1.37</jmh.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <!-- JCache provider without external XML (avoids classpath:/URI issues on Windows paths with spaces) -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>jcache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- JMH: compiled into main so benchmarks run with mvn exec:java@jmh-benchmarks -->
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
                 <configuration>
                     <release>21</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.openjdk.jmh</groupId>
+                            <artifactId>jmh-generator-annprocess</artifactId>
+                            <version>${jmh.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -58,12 +109,57 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>lab11-compulsory</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ro.uaic.asli.lab11.app.Lab11CompulsoryApp</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>lab11-homework</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ro.uaic.asli.lab11.app.Lab11HomeworkApp</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>lab11-advanced</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ro.uaic.asli.lab11.app.Lab11AdvancedApp</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>load-demo</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
                         <configuration>
                             <mainClass>ro.uaic.asli.lab10.advanced.VirtualThreadLoadDemo</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jmh-benchmarks</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.openjdk.jmh.Main</mainClass>
+                            <arguments>
+                                <argument>-f</argument>
+                                <argument>0</argument>
+                                <argument>ro.uaic.asli.lab10.persistence.benchmark.Lab11PersistenceBenchmark</argument>
+                                <argument>-wi</argument>
+                                <argument>2</argument>
+                                <argument>-i</argument>
+                                <argument>3</argument>
+                            </arguments>
                         </configuration>
                     </execution>
                 </executions>

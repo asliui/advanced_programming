@@ -1,8 +1,13 @@
 package ro.uaic.asli.lab10.app;
 
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 import ro.uaic.asli.lab10.game.CompulsoryGameSession;
 import ro.uaic.asli.lab10.game.HomeworkGameSession;
 import ro.uaic.asli.lab10.game.Lab10SessionFactory;
+import ro.uaic.asli.lab10.persistence.Lab10PersistenceSpringBoot;
+import ro.uaic.asli.lab10.persistence.service.QuizGamePersistenceService;
 import ro.uaic.asli.lab10.server.GameServer;
 
 import java.nio.file.Path;
@@ -34,9 +39,20 @@ public final class Lab10Launcher {
             }
         }
 
+        ConfigurableApplicationContext persistenceSpring = null;
+        QuizGamePersistenceService quizPersistence = null;
+        if (mode != Lab10Mode.COMPULSORY) {
+            persistenceSpring = new SpringApplicationBuilder(Lab10PersistenceSpringBoot.class)
+                    .web(WebApplicationType.NONE)
+                    .run();
+            quizPersistence = persistenceSpring.getBean(QuizGamePersistenceService.class);
+        }
+
+        final QuizGamePersistenceService persistenceBean = quizPersistence;
         Lab10SessionFactory factory = switch (mode) {
             case COMPULSORY -> CompulsoryGameSession::new;
-            case HOMEWORK, ADVANCED -> HomeworkGameSession::new;
+            case HOMEWORK, ADVANCED -> (srv, qPath, kbPathArg) ->
+                    new HomeworkGameSession(srv, qPath, kbPathArg, persistenceBean);
         };
 
         String tierLabel = switch (mode) {
@@ -47,7 +63,16 @@ public final class Lab10Launcher {
         System.out.println("Starting Lab 10 server - " + tierLabel);
 
         GameServer server = new GameServer(port, questions, kb, virtualThreads, factory);
-        Runtime.getRuntime().addShutdownHook(new Thread(server::shutdownGracefully, "lab10-shutdown-hook"));
+        ConfigurableApplicationContext springToClose = persistenceSpring;
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                server.shutdownGracefully();
+            } finally {
+                if (springToClose != null) {
+                    springToClose.close();
+                }
+            }
+        }, "lab10-shutdown-hook"));
         server.start();
     }
 }
